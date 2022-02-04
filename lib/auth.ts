@@ -1,7 +1,7 @@
 import { User } from "@prisma/client";
 import Cookies from "cookies";
+import { IncomingMessage, ServerResponse } from "http";
 import jwt from "jsonwebtoken";
-import { GetServerSidePropsContext } from "next";
 // import Cookies from "cookies";
 
 export const validateToken = (token?: string) => {
@@ -12,7 +12,16 @@ export const validateToken = (token?: string) => {
   return user;
 };
 
-export const getUser = ({ req, res }: GetServerSidePropsContext) => {
+interface Context {
+  req?: IncomingMessage;
+  res?: ServerResponse;
+}
+
+export const getUser = ({ req, res }: Context) => {
+  if (!req || !res) {
+    return;
+  }
+
   const token = new Cookies(req, res).get("token");
   if (!token) {
     return;
