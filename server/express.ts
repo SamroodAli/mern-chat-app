@@ -1,5 +1,5 @@
 import express, { Express } from "express";
-import morgan from "morgan";
+// import morgan from "morgan";
 import "express-async-errors";
 import { json, urlencoded } from "express";
 import { signupRouter } from "./routes/signup";
@@ -10,7 +10,7 @@ import { NotFoundError } from "./errors/not-found";
 import { currentUser } from "./middlewares/current-user";
 
 const app: Express = express();
-app.use(morgan("dev"));
+// app.use(morgan("dev"));
 app.use(urlencoded({ extended: true }));
 app.use(json());
 
