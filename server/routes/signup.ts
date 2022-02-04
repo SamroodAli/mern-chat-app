@@ -5,6 +5,7 @@ import { body } from "express-validator";
 import prisma from "../../lib/prisma";
 import { Request, Response, Router } from "express";
 import { validateRequest } from "../middlewares/validate-request";
+import Cookies from "cookies";
 
 const router = Router();
 
@@ -46,10 +47,11 @@ router.post(
       { expiresIn: "8h" }
     );
 
-    req.session = {
-      jwt: token,
-    };
+    const cookies = new Cookies(req, res);
 
+    cookies.set("token", token, {
+      httpOnly: true,
+    });
     res.status(201).json({ data: user });
   }
 );

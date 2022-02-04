@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import { body } from "express-validator";
 import { validateRequest } from "../middlewares/validate-request";
 import prisma from "../../lib/prisma";
+import Cookies from "cookies";
 
 const router = Router();
 router.post(
@@ -38,9 +39,11 @@ router.post(
         }
       );
 
-      req.session = {
-        jwt: token,
-      };
+      const cookies = new Cookies(req, res);
+
+      cookies.set("token", token, {
+        httpOnly: true,
+      });
 
       res.status(200).json(user);
     } else {
