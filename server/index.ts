@@ -6,6 +6,12 @@ const port: number = parseInt(process.env.PORT || "3000", 10);
 const dev: boolean = process.env.NODE_ENV !== "production";
 const nextApp = next({ dev });
 const nextHandler: NextApiHandler = nextApp.getRequestHandler();
+import * as dotenv from "dotenv";
+
+dotenv.config();
+if (!process.env.JWT_SECRET) {
+  throw new Error("JWT_SECRET must be defined");
+}
 
 nextApp.prepare().then(() => {
   const server = socketServer(app);
