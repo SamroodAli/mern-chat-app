@@ -34,16 +34,9 @@ router.post("/api/users/signup", async (req: Request, res: Response) => {
     { expiresIn: "8h" }
   );
 
-  res.setHeader(
-    "Set-Cookie",
-    cookie.serialize("MERN_ACESS_TOKEN", token, {
-      httpOnly: true,
-      maxAge: 8 * 60 * 60,
-      path: "/",
-      sameSite: "lax",
-      secure: process.env.NODE_ENV === "production",
-    })
-  );
+  req.session = {
+    jwt: token,
+  };
 
   res.status(201).json({ data: user });
 });
