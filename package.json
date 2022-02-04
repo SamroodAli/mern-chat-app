@@ -6,6 +6,7 @@
     "start": "cross-env NODE_ENV=production node dist/index.js"
   },
   "dependencies": {
+    "@prisma/client": "^3.9.1",
     "@types/express": "^4.17.13",
     "bcrypt": "^5.0.1",
     "cookie": "^0.4.2",
