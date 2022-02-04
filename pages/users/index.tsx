@@ -1,6 +1,7 @@
 import prisma from "../../lib/prisma";
 import { User } from "@prisma/client";
-import { NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
+import { getUser } from "../../lib/auth";
 
 const Users: NextPage<{ users: User[] }> = ({ users }) => {
   return (
@@ -15,17 +16,32 @@ const Users: NextPage<{ users: User[] }> = ({ users }) => {
   );
 };
 
-export const getServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const user = getUser(context);
+
+  if (!user) {
+    return {
+      redirect: "/login",
+      props: {},
+    };
+  }
+
   const users = await prisma.user.findMany({
+    where: {
+      NOT: {
+        id: user.id,
+      },
+    },
     select: {
       id: true,
       username: true,
     },
   });
-  console.log(users);
+
   return {
     props: {
-      users: users,
+      users,
+      user,
     },
   };
 };

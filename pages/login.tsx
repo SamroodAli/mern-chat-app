@@ -1,9 +1,9 @@
 import * as React from "react";
 import axios from "axios";
 
-const Signin = () => {
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
+const Login = () => {
+  const [email, setEmail] = React.useState("Demo@gmail.com");
+  const [password, setPassword] = React.useState("password");
 
   const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
@@ -30,4 +30,4 @@ const Signin = () => {
   );
 };
 
-export default Signin;
+export default Login;
