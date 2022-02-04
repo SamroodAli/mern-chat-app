@@ -9,10 +9,22 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement()) //@id is the id for the relation and by default, it will be autoincremented
+  id        String   @id @default(cuid())
   username  String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   email     String   @unique
   password  String
+
+  messagesSent     Message[] @relation("Sender")
+  messagesRecieved Message[] @relation("Recipient")
+}
+
+model Message {
+  id          String @id @default(cuid())
+  content     String
+  sender      User   @relation("Sender", fields: [senderId], references: [id])
+  senderId    String
+  recipient   User   @relation("Recipient", fields: [recipientId], references: [id])
+  recipientId String
 }
