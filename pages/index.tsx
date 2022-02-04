@@ -1,6 +1,3 @@
-
-export default function Home() {
-  return (
-    <div>Hello world</div>
-  )
+export default function Home({ user }: any) {
+  return <div>Hello {user?.username}</div>;
 }

@@ -29,6 +29,7 @@ router.post(
     if (user && bcrypt.compareSync(password, user.password)) {
       const token = jwt.sign(
         {
+          username: user.username,
           id: user.id,
           email: user.email,
           time: Date.now(),

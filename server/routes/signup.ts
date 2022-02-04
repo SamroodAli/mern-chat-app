@@ -39,6 +39,7 @@ router.post(
 
     const token = jwt.sign(
       {
+        username: user.username,
         email: user.email,
         id: user.id,
         time: Date.now(),
