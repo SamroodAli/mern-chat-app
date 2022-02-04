@@ -2,6 +2,7 @@ import prisma from "../../lib/prisma";
 import { User } from "@prisma/client";
 import { GetServerSideProps, NextPage } from "next";
 import { getUser } from "../../lib/auth";
+import Link from "next/link";
 
 const Users: NextPage<{ users: User[] }> = ({ users }) => {
   return (
@@ -9,7 +10,16 @@ const Users: NextPage<{ users: User[] }> = ({ users }) => {
       <h1>Users</h1>
       <ul>
         {users.map((user) => (
-          <li key={user.id}>{user.username}</li>
+          <li key={user.id}>
+            <Link
+              href={{
+                pathname: "/users/[username]",
+                query: { username: user.username },
+              }}
+            >
+              {user.username}
+            </Link>
+          </li>
         ))}
       </ul>
     </div>
