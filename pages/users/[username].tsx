@@ -1,7 +1,7 @@
 import prisma from "../../lib/prisma";
 import { User } from "@prisma/client";
 import { GetServerSideProps, NextPage } from "next";
-import { getUser } from "../../lib/auth";
+import { getUser, redirect } from "../../lib/auth";
 
 const Users: NextPage<{ user: User }> = ({ user }) => {
   return (
@@ -13,12 +13,8 @@ const Users: NextPage<{ user: User }> = ({ user }) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const currentUser = getUser(context);
-
   if (!currentUser) {
-    return {
-      redirect: "/login",
-      props: {},
-    };
+    return redirect;
   }
 
   const user = await prisma.user.findUnique({

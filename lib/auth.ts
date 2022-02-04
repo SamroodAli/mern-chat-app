@@ -30,3 +30,10 @@ export const getUser = ({ req, res }: Context) => {
   const user = validateToken(token);
   return user;
 };
+
+export const redirect = {
+  redirect: {
+    destination: "/login",
+    permanent: false,
+  },
+};

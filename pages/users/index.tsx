@@ -1,7 +1,7 @@
 import prisma from "../../lib/prisma";
 import { User } from "@prisma/client";
 import { GetServerSideProps, NextPage } from "next";
-import { getUser } from "../../lib/auth";
+import { getUser, redirect } from "../../lib/auth";
 import Link from "next/link";
 
 const Users: NextPage<{ users: User[] }> = ({ users }) => {
@@ -30,10 +30,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const user = getUser(context);
 
   if (!user) {
-    return {
-      redirect: "/login",
-      props: {},
-    };
+    return redirect;
   }
 
   const users = await prisma.user.findMany({
