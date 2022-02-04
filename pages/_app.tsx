@@ -6,7 +6,7 @@ import { User } from "@prisma/client";
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <Layout user={pageProps.currentUser}>
-      <Component {...pageProps} />;
+      <Component {...pageProps} />
     </Layout>
   );
 }
