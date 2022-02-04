@@ -8,6 +8,6 @@ export class NotFoundError extends CustomError {
   }
 
   serializeErrors() {
-    return [{ message: "Route not found" }];
+    return [{ message: "Api route not found" }];
   }
 }

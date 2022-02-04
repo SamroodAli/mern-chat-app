@@ -1,6 +1,5 @@
 import bcyrpt from "bcrypt";
 import jwt from "jsonwebtoken";
-import cookie from "cookie";
 import { User } from "@prisma/client";
 import prisma from "../../lib/prisma";
 import { Request, Response, Router } from "express";

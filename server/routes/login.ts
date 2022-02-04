@@ -1,12 +1,10 @@
 import { Request, Response, Router } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import cookie from "cookie";
 import prisma from "../../lib/prisma";
 
 const router = Router();
 router.post("/api/users/login", async (req: Request, res: Response) => {
-  console.log("I ran");
   const { email, password } = req.body;
 
   const user = await prisma.user.findUnique({
