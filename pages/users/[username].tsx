@@ -20,11 +20,6 @@ const Users: NextPage<{ reciever: User; pastMessages: Message[] }> = ({
   React.useEffect(() => {
     const newSocket = io(ENDPOINT);
     setSocket(newSocket);
-    return () => {
-      if (socket) {
-        socket.close();
-      }
-    };
   }, []);
 
   React.useEffect(() => {
@@ -34,6 +29,11 @@ const Users: NextPage<{ reciever: User; pastMessages: Message[] }> = ({
         setMessages((prev) => [...prev, message]);
       });
     }
+    return () => {
+      if (socket) {
+        socket.close();
+      }
+    };
   }, [socket, sender, reciever]);
 
   const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {

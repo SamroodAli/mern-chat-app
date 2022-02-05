@@ -12,11 +12,14 @@ const createServer = (expressApp: http.RequestListener) => {
 
   io.on("connection", (socket: socketio.Socket) => {
     socket.on("login", (sender: User, reciever: User) => {
-      socket.join(`${sender.id}-${reciever.id}`);
-      socket.join(`${reciever.id}-${sender.id}`);
+      const senderRoom = `${sender.id}-${reciever.id}`;
+      const recieverRoom = `${reciever.id}-${sender.id}`;
+      socket.join(senderRoom);
+      socket.join(recieverRoom);
 
       socket.on("message", async (data: { message: string }) => {
         // let message;
+
         const message = await prisma.message.create({
           data: {
             senderId: sender.id,
@@ -25,14 +28,16 @@ const createServer = (expressApp: http.RequestListener) => {
           },
         });
 
-        io.to(`${sender.id}-${reciever.id}`)
-          .to(`${reciever.id}-${sender.id}`)
-          .emit("message", message);
-      });
+        //@ts-ignore
+        if (io.sockets.adapter.rooms.get(senderRoom).size === 1) {
+          console.log("Alone");
+        }
 
+        io.to(senderRoom).to(recieverRoom).emit("message", message);
+      });
       socket.on("disconnect", () => {
-        socket.leave(`${sender.id}-${reciever.id}`);
-        socket.leave(`${reciever.id}-${sender.id}`);
+        socket.leave(senderRoom);
+        socket.leave(recieverRoom);
       });
     });
   });
