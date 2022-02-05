@@ -9,7 +9,7 @@ const Layout: React.FunctionComponent<{ user?: User }> = ({
 }) => {
   console.log("running");
   const { loggedIn, currentUser } = useSelector((state) => state);
-  const { setCurrentUser } = useActions((actions) => actions);
+  const { setCurrentUser, logout } = useActions((actions) => actions);
 
   React.useEffect(() => {
     console.log("I ran");
@@ -17,6 +17,10 @@ const Layout: React.FunctionComponent<{ user?: User }> = ({
       setCurrentUser(user);
     }
   }, []);
+
+  const signOut = () => {
+    logout();
+  };
 
   return (
     <div>
@@ -30,6 +34,9 @@ const Layout: React.FunctionComponent<{ user?: User }> = ({
         <Link href="/login">
           <a>Login</a>
         </Link>
+        <button type="button" onClick={signOut}>
+          Signout
+        </button>
       </div>
       {children}
     </div>

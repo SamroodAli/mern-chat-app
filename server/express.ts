@@ -7,6 +7,7 @@ import { loginRouter } from "./routes/login";
 import { errorHandler } from "./middlewares/error-handler";
 import { NotFoundError } from "./errors/not-found";
 import { currentUser } from "./middlewares/current-user";
+import { logoutRouter } from "./routes/logout";
 
 const app: Express = express();
 // app.use(morgan("dev"));
@@ -16,6 +17,7 @@ app.use(json());
 app.use(currentUser);
 app.use(signupRouter);
 app.use(loginRouter);
+app.use(logoutRouter);
 
 app.all("/api/*", async () => {
   throw new NotFoundError();
