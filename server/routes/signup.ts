@@ -43,7 +43,6 @@ router.post(
         username: user.username,
         email: user.email,
         id: user.id,
-        time: Date.now(),
       },
       process.env.JWT_SECRET!,
       { expiresIn: "8h" }

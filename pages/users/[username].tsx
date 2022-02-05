@@ -77,6 +77,25 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     orderBy: {
       createdAt: "asc",
     },
+
+    select: {
+      sender: {
+        select: {
+          id: true,
+          username: true,
+          updatedAt: false,
+          createdAt: false,
+        },
+      },
+      reciever: {
+        select: {
+          id: true,
+          username: true,
+          updatedAt: false,
+          createdAt: false,
+        },
+      },
+    },
     where: {
       OR: [
         {
@@ -97,14 +116,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         },
       ],
     },
-
-    select: {
-      id: true,
-      content: true,
-      senderId: true,
-    },
   });
 
+  console.log(messages);
   return {
     props: {
       reciever: user,

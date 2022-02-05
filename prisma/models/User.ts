@@ -1,16 +1,7 @@
 import { prisma } from "../client";
-import { Message, PrismaClient, User } from "@prisma/client";
+import { PrismaClient, User } from "@prisma/client";
 
-export interface UserWithLastMessage extends User {
-  lastMessage: Message | null;
-}
-
-interface UserModel {
-  getUsersWithLastMessage(currentUser: User): Promise<UserWithLastMessage[]>;
-  getCurrentUser(username: User["username"]): Promise<User | null>;
-}
-
-class Users implements UserModel {
+class Users {
   constructor(private readonly prisma: PrismaClient["user"]) {}
 
   async getUsersWithLastMessage(currentUser: User) {
@@ -20,7 +11,11 @@ class Users implements UserModel {
           id: currentUser.id,
         },
       },
-      include: {
+      select: {
+        username: true,
+        id: true,
+        createdAt: false,
+        updatedAt: false,
         messagesRecieved: {
           take: 1,
           orderBy: {
@@ -50,6 +45,12 @@ class Users implements UserModel {
     return await prisma.user.findUnique({
       where: {
         username,
+      },
+      select: {
+        id: true,
+        username: true,
+        createdAt: false,
+        updatedAt: false,
       },
     });
   }
