@@ -1,4 +1,4 @@
-import { UserModel, prisma } from "../../prisma";
+import { UserModel, MessageModel } from "../../prisma";
 import { Message, User } from "@prisma/client";
 import { GetServerSideProps, NextPage } from "next";
 import { getUser, redirect } from "../../lib/auth";
@@ -67,65 +67,19 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if (!currentUser) {
     return redirect;
   }
-  const user = await UserModel.getCurrentUser(context.query.username as string);
+  const reciever = await UserModel.getCurrentUser(
+    context.query.username as string
+  );
 
-  if (!user) {
+  if (!reciever) {
     return redirect;
   }
 
-  const messages = await prisma.message.findMany({
-    orderBy: {
-      createdAt: "asc",
-    },
-
-    select: {
-      id: true,
-      content: true,
-      createdAt: false,
-      updatedAt: false,
-      senderId: true,
-      sender: {
-        select: {
-          id: true,
-          username: true,
-          updatedAt: false,
-          createdAt: false,
-        },
-      },
-      reciever: {
-        select: {
-          id: true,
-          username: true,
-          updatedAt: false,
-          createdAt: false,
-        },
-      },
-    },
-    where: {
-      OR: [
-        {
-          sender: {
-            id: currentUser.id,
-          },
-          reciever: {
-            id: user.id,
-          },
-        },
-        {
-          sender: {
-            id: user.id,
-          },
-          reciever: {
-            id: currentUser.id,
-          },
-        },
-      ],
-    },
-  });
+  const messages = await MessageModel.getMessages(currentUser.id, reciever.id);
 
   return {
     props: {
-      reciever: user,
+      reciever,
       pastMessages: messages,
     },
   };
