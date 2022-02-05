@@ -15,19 +15,17 @@ const createServer = (expressApp: http.RequestListener) => {
       socket.join(`${reciever.id}-${sender.id}`);
 
       socket.on("message", async (data: { message: string }) => {
-        io.to(`${sender.id}-${reciever.id}`)
-          .to(`${reciever.id}-${sender.id}`)
-          .emit("message", {
-            message: data.message,
-          });
-
-        await prisma.message.create({
+        const message = await prisma.message.create({
           data: {
             senderId: sender.id,
             recieverId: reciever.id,
             content: data.message,
           },
         });
+
+        io.to(`${sender.id}-${reciever.id}`)
+          .to(`${reciever.id}-${sender.id}`)
+          .emit("message", message);
       });
 
       socket.on("disconnect", () => {

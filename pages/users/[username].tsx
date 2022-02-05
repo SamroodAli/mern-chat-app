@@ -1,5 +1,5 @@
 import prisma from "../../lib/prisma";
-import { User } from "@prisma/client";
+import { Message, User } from "@prisma/client";
 import { GetServerSideProps, NextPage } from "next";
 import { getUser, redirect } from "../../lib/auth";
 import * as React from "react";
@@ -8,13 +8,12 @@ import { useSelector } from "../../redux/store";
 
 const ENDPOINT = `http://192.168.100.175:3000`;
 
-interface MessageData {
-  message: string;
-}
-
-const Users: NextPage<{ reciever: User }> = ({ reciever }) => {
+const Users: NextPage<{ reciever: User; pastMessages: Message[] }> = ({
+  reciever,
+  pastMessages,
+}) => {
   const [message, setMessage] = React.useState("");
-  const [messages, setMessages] = React.useState<string[]>([]);
+  const [messages, setMessages] = React.useState<Message[]>(pastMessages);
   const [socket, setSocket] = React.useState<Socket | null>(null);
   const { currentUser: sender } = useSelector((state) => state);
 
@@ -31,7 +30,7 @@ const Users: NextPage<{ reciever: User }> = ({ reciever }) => {
   React.useEffect(() => {
     if (socket && sender && reciever) {
       socket.emit("login", sender, reciever);
-      socket.on("message", ({ message }: MessageData) => {
+      socket.on("message", (message: Message) => {
         setMessages((prev) => [...prev, message]);
       });
     }
@@ -39,6 +38,7 @@ const Users: NextPage<{ reciever: User }> = ({ reciever }) => {
 
   const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
+    setMessage("");
     if (socket) {
       socket.emit("message", { message });
     }
@@ -48,8 +48,8 @@ const Users: NextPage<{ reciever: User }> = ({ reciever }) => {
     <div>
       <h1>Chat with {reciever.username}</h1>
       <ul>
-        {messages.map((message) => (
-          <li key={message}>{message}</li>
+        {messages.map(({ id, content }) => (
+          <li key={id}>{content}</li>
         ))}
       </ul>
       <form onSubmit={onSubmit}>
@@ -81,9 +81,42 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     },
   });
 
+  if (!user) {
+    return redirect;
+  }
+
+  const messages = await prisma.message.findMany({
+    where: {
+      OR: [
+        {
+          sender: {
+            id: currentUser.id,
+          },
+          reciever: {
+            id: user.id,
+          },
+        },
+        {
+          sender: {
+            id: user.id,
+          },
+          reciever: {
+            id: currentUser.id,
+          },
+        },
+      ],
+    },
+
+    select: {
+      id: true,
+      content: true,
+    },
+  });
+
   return {
     props: {
       reciever: user,
+      pastMessages: messages,
     },
   };
 };
