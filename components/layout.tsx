@@ -7,7 +7,6 @@ const Layout: React.FunctionComponent<{ user?: User }> = ({
   user,
   children,
 }) => {
-  console.log("running");
   const { loggedIn, currentUser } = useSelector((state) => state);
   const { setCurrentUser, logout } = useActions((actions) => actions);
 

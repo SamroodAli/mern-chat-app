@@ -14,9 +14,9 @@ import axios from "axios";
 interface State {
   currentUser?: User;
   loggedIn: Computed<State, boolean>;
-  setCurrentUser: Action<State, User>;
+  setCurrentUser: Action<State, User | undefined>;
   login: Thunk<State, { email: string; password: string }>;
-  logout: Action<State>;
+  logout: Thunk<State>;
 }
 
 // initial state and available actions
@@ -26,7 +26,12 @@ export const store = createStore<State>({
   setCurrentUser: action((state, user) => {
     state.currentUser = user;
   }),
-  logout: action((state) => (state.currentUser = undefined)),
+  logout: thunk(async (actions) => {
+    const { data } = await axios.post("/api/users/logout");
+    if (data) {
+      actions.setCurrentUser(undefined);
+    }
+  }),
   login: thunk(async (actions, { email, password }) => {
     const { data } = await axios.post("/api/users/login", {
       email,
