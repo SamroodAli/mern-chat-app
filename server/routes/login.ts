@@ -46,7 +46,7 @@ router.post(
         httpOnly: true,
       });
 
-      res.status(200).json(user);
+      res.status(200).json({ content: user });
     } else {
       res.status(401).json({ error: "Invalid credentials" });
     }

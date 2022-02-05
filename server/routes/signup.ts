@@ -53,7 +53,7 @@ router.post(
     cookies.set("token", token, {
       httpOnly: true,
     });
-    res.status(201).json({ data: user });
+    res.status(201).json({ content: user });
   }
 );
 

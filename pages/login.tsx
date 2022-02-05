@@ -1,16 +1,14 @@
 import * as React from "react";
-import axios from "axios";
+import { useActions } from "../redux/store";
 
 const Login = () => {
   const [email, setEmail] = React.useState("Demo@gmail.com");
   const [password, setPassword] = React.useState("password");
+  const { login } = useActions((actions) => actions);
 
   const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
-    axios.post("/api/users/login", {
-      email,
-      password,
-    });
+    login({ email, password });
   };
 
   return (
