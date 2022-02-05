@@ -2,6 +2,7 @@ import { User } from "@prisma/client";
 import * as React from "react";
 import Link from "next/link";
 import { useSelector, useActions } from "../redux/store";
+import { useRouter } from "next/router";
 
 const Layout: React.FunctionComponent<{ user?: User }> = ({
   user,
@@ -9,15 +10,16 @@ const Layout: React.FunctionComponent<{ user?: User }> = ({
 }) => {
   const { loggedIn, currentUser } = useSelector((state) => state);
   const { setCurrentUser, logout } = useActions((actions) => actions);
+  const router = useRouter();
 
   React.useEffect(() => {
-    console.log("I ran");
     if (!loggedIn && user) {
       setCurrentUser(user);
     }
   }, []);
 
   const signOut = () => {
+    router.push("/");
     logout();
   };
 

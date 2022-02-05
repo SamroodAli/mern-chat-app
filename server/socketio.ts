@@ -8,7 +8,9 @@ const createServer = (expressApp: http.RequestListener) => {
 
   io.on("connection", (socket: socketio.Socket) => {
     console.log("connection");
-    socket.emit("status", "Hello from Socket.io");
+    socket.on("message", (message: string) => {
+      socket.emit("message", message);
+    });
 
     socket.on("disconnect", () => {
       console.log("client disconnected");
