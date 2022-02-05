@@ -4,9 +4,11 @@ import { getUser, redirect } from "../../lib/auth";
 import Link from "next/link";
 import { ChatItem } from "react-chat-elements";
 import { useRouter } from "next/router";
-import { User } from "@prisma/client";
+import { Message, User } from "@prisma/client";
 
-const Users: NextPage<{ users: User[] }> = ({ users }) => {
+const Users: NextPage<{ users: (User & { lastMessage?: Message })[] }> = ({
+  users,
+}) => {
   const router = useRouter();
 
   return (
@@ -24,10 +26,10 @@ const Users: NextPage<{ users: User[] }> = ({ users }) => {
               onClick={() => {
                 router.push(`/users/${user.username}`);
               }}
-              avatar={"https://via.placeholder.com/150"}
+              avatar={"https://placekitten.com/g/100/100"}
               alt={"Reactjs"}
               title={user.username}
-              // subtitle={user.message}
+              subtitle={user.lastMessage?.content}
               date={new Date()}
               unread={0}
             />

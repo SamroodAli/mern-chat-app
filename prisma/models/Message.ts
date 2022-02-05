@@ -3,10 +3,16 @@ import { PrismaClient } from "@prisma/client";
 
 class Messages {
   constructor(private readonly prisma: PrismaClient["message"]) {}
-  async getMessages(senderId: string, recieverId: string) {
+  async getMessages(
+    senderId: string,
+    recieverId: string,
+    take?: number,
+    order: "asc" | "desc" = "asc"
+  ) {
     return this.prisma.findMany({
+      take,
       orderBy: {
-        createdAt: "asc",
+        createdAt: order,
       },
       include: {
         sender: true,
