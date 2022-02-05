@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Message, User } from "@prisma/client";
+import axios from "axios";
 
 const MessageList: React.FC<{ messages: Message[]; sender: User }> = ({
   messages,
@@ -28,7 +29,21 @@ const MessageList: React.FC<{ messages: Message[]; sender: User }> = ({
     console.log(forwardMessages);
   };
 
-  const handleForward: React.MouseEventHandler<HTMLButtonElement> = (e) => {};
+  const handleForward: React.MouseEventHandler<HTMLButtonElement> = async (
+    e
+  ) => {
+    const { data } = await axios.post(
+      "http://192.168.100.175:3000/api/messages/forward",
+      {
+        messages: forwardMessages
+          .sort((a, b) => +a.split(",")[0] - +b.split(",")[0])
+          .map((a) => a.split(",")[1]),
+        sender: sender.id,
+        users: [],
+      }
+    );
+    console.log(data);
+  };
 
   return (
     <div>
