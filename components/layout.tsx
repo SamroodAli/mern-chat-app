@@ -1,5 +1,6 @@
 import { User } from "@prisma/client";
 import * as React from "react";
+import Link from "next/link";
 
 const Layout: React.FunctionComponent<{ user?: User }> = ({
   user,
@@ -7,7 +8,15 @@ const Layout: React.FunctionComponent<{ user?: User }> = ({
 }) => {
   return (
     <div>
-      <div>Navbar Hello {user?.username}</div>
+      <div>Navbar {user ? `${user?.username}` : "Signed out"}</div>
+      <div>
+        <Link href="/">
+          <a>Home</a>
+        </Link>{" "}
+        <Link href="/login">
+          <a>Login</a>
+        </Link>
+      </div>
       {children}
     </div>
   );

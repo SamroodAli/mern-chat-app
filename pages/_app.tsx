@@ -1,13 +1,16 @@
 import { getUser } from "../lib/auth";
 import type { AppContext, AppProps } from "next/app";
 import Layout from "../components/layout";
-import { User } from "@prisma/client";
+import { StoreProvider } from "easy-peasy";
+import { store } from "../lib/store";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <Layout user={pageProps.currentUser}>
-      <Component {...pageProps} />
-    </Layout>
+    <StoreProvider store={store}>
+      <Layout user={pageProps.currentUser}>
+        <Component {...pageProps} />
+      </Layout>
+    </StoreProvider>
   );
 }
 
