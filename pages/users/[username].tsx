@@ -2,11 +2,19 @@ import prisma from "../../lib/prisma";
 import { User } from "@prisma/client";
 import { GetServerSideProps, NextPage } from "next";
 import { getUser, redirect } from "../../lib/auth";
+import * as React from "react";
 
 const Users: NextPage<{ user: User }> = ({ user }) => {
+  const [message, setMessage] = React.useState("");
   return (
     <div>
       <h1>Chat with {user.username}</h1>
+      <input
+        type="text"
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        placeholder="Message"
+      />
     </div>
   );
 };

@@ -30,12 +30,19 @@ const Layout: React.FunctionComponent<{ user?: User }> = ({
         <Link href="/">
           <a>Home</a>
         </Link>{" "}
-        <Link href="/login">
-          <a>Login</a>
+        {!currentUser && (
+          <Link href="/login">
+            <a>Login</a>
+          </Link>
+        )}
+        <Link href="/users">
+          <a>Users</a>
         </Link>
-        <button type="button" onClick={signOut}>
-          Signout
-        </button>
+        {currentUser && (
+          <button type="button" onClick={signOut}>
+            Signout
+          </button>
+        )}
       </div>
       {children}
     </div>
