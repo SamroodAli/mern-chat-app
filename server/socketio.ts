@@ -2,7 +2,7 @@
 import { User } from "@prisma/client";
 import * as http from "http";
 import * as socketio from "socket.io";
-// import { prisma } from "../lib/prisma";
+import prisma from "../lib/prisma";
 
 const createServer = (expressApp: http.RequestListener) => {
   const server: http.Server = http.createServer(expressApp);
@@ -10,16 +10,24 @@ const createServer = (expressApp: http.RequestListener) => {
   io.attach(server);
 
   io.on("connection", (socket: socketio.Socket) => {
-    socket.on("login", async (sender: User, reciever: User) => {
+    socket.on("login", (sender: User, reciever: User) => {
       socket.join(`${sender.id}-${reciever.id}`);
       socket.join(`${reciever.id}-${sender.id}`);
 
-      socket.on("message", (data: { message: string }) => {
+      socket.on("message", async (data: { message: string }) => {
         io.to(`${sender.id}-${reciever.id}`)
           .to(`${reciever.id}-${sender.id}`)
           .emit("message", {
             message: data.message,
           });
+
+        await prisma.message.create({
+          data: {
+            senderId: sender.id,
+            recieverId: reciever.id,
+            content: data.message,
+          },
+        });
       });
 
       socket.on("disconnect", () => {

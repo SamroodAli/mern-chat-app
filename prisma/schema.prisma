@@ -21,10 +21,10 @@ model User {
 }
 
 model Message {
-  id          String @id @default(cuid())
-  content     String
-  sender      User   @relation("Sender", fields: [senderId], references: [id])
-  senderId    String
-  recipient   User   @relation("Recipient", fields: [recipientId], references: [id])
-  recipientId String
+  id         String @id @default(cuid())
+  content    String
+  sender     User   @relation("Sender", fields: [senderId], references: [id])
+  senderId   String
+  reciever   User   @relation("Recipient", fields: [recieverId], references: [id])
+  recieverId String
 }
