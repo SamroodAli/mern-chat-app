@@ -4,21 +4,23 @@ import { GetServerSideProps, NextPage } from "next";
 import { getUser, redirect } from "../../lib/auth";
 import * as React from "react";
 import io, { Socket } from "socket.io-client";
+import { useSelector } from "../../redux/store";
 
-const ENDPOINT = `http://localhost:3000`;
+const ENDPOINT = `http://192.168.100.175:3000`;
 
-const Users: NextPage<{ user: User }> = ({ user }) => {
+interface MessageData {
+  message: string;
+}
+
+const Users: NextPage<{ reciever: User }> = ({ reciever }) => {
   const [message, setMessage] = React.useState("");
-  const [response, setResponse] = React.useState<string[]>([]);
+  const [messages, setMessages] = React.useState<string[]>([]);
   const [socket, setSocket] = React.useState<Socket | null>(null);
+  const { currentUser: sender } = useSelector((state) => state);
 
   React.useEffect(() => {
     const newSocket = io(ENDPOINT);
     setSocket(newSocket);
-    newSocket.on("message", (data: string) => {
-      console.log(response);
-      setResponse((prev) => [...prev, data]);
-    });
     return () => {
       if (socket) {
         socket.close();
@@ -26,20 +28,27 @@ const Users: NextPage<{ user: User }> = ({ user }) => {
     };
   }, []);
 
+  React.useEffect(() => {
+    if (socket && sender && reciever) {
+      socket.emit("login", sender, reciever);
+      socket.on("message", ({ message }: MessageData) => {
+        setMessages((prev) => [...prev, message]);
+      });
+    }
+  }, [socket, sender, reciever]);
+
   const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
-
     if (socket) {
-      socket.emit("message", message);
-      setMessage("");
+      socket.emit("message", { message });
     }
   };
 
   return (
     <div>
-      <h1>Chat with {user.username}</h1>
+      <h1>Chat with {reciever.username}</h1>
       <ul>
-        {response.map((message) => (
+        {messages.map((message) => (
           <li key={message}>{message}</li>
         ))}
       </ul>
@@ -74,7 +83,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   return {
     props: {
-      user,
+      reciever: user,
     },
   };
 };

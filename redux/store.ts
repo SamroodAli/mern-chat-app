@@ -26,7 +26,7 @@ export const store = createStore<State>({
   setCurrentUser: action((state, user) => {
     state.currentUser = user;
   }),
-  logout: thunk(async (actions, router) => {
+  logout: thunk(async (actions) => {
     const { data } = await axios.post("/api/users/logout");
     if (data) {
       actions.setCurrentUser(undefined);
