@@ -8,10 +8,11 @@ import { useSelector } from "../../redux/store";
 import MessageList from "../../components/MessageList";
 const ENDPOINT = `http://192.168.100.175:3000`;
 
-const Users: NextPage<{ reciever: User; pastMessages: Message[] }> = ({
-  reciever,
-  pastMessages,
-}) => {
+const Users: NextPage<{
+  reciever: User;
+  pastMessages: Message[];
+  users: User[];
+}> = ({ reciever, pastMessages, users }) => {
   const [message, setMessage] = React.useState("");
   const [messages, setMessages] = React.useState<Message[]>(pastMessages);
   const [socket, setSocket] = React.useState<Socket | null>(null);
@@ -47,7 +48,7 @@ const Users: NextPage<{ reciever: User; pastMessages: Message[] }> = ({
   return (
     <div>
       <h1>Chat with {reciever.username}</h1>
-      <MessageList messages={messages} sender={sender!} />
+      <MessageList messages={messages} sender={sender!} users={users} />
       <form onSubmit={onSubmit}>
         <input
           type="text"
@@ -70,6 +71,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     context.query.username as string
   );
 
+  const users = await UserModel.getAllUsers();
+
   if (!reciever) {
     return redirect;
   }
@@ -80,6 +83,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {
       reciever,
       pastMessages: messages,
+      users,
     },
   };
 };

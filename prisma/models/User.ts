@@ -29,6 +29,10 @@ class Users {
     );
   }
 
+  getAllUsers() {
+    return this.prisma.findMany();
+  }
+
   async getCurrentUser(username: string) {
     return await prisma.user.findUnique({
       where: {
