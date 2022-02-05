@@ -11,10 +11,6 @@ class Users {
           id: user.id,
         },
       },
-      select: {
-        username: true,
-        id: true,
-      },
     });
   }
 
@@ -22,12 +18,6 @@ class Users {
     return await prisma.user.findUnique({
       where: {
         username,
-      },
-      select: {
-        id: true,
-        username: true,
-        createdAt: false,
-        updatedAt: false,
       },
     });
   }

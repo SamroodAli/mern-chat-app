@@ -6,7 +6,6 @@ import * as React from "react";
 import io, { Socket } from "socket.io-client";
 import { useSelector } from "../../redux/store";
 import MessageList from "../../components/MessageList";
-
 const ENDPOINT = `http://192.168.100.175:3000`;
 
 const Users: NextPage<{ reciever: User; pastMessages: Message[] }> = ({

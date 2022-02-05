@@ -5,6 +5,7 @@ const MessageList: React.FC<{ messages: Message[]; sender: User }> = ({
   messages,
   sender,
 }) => {
+  console.log(typeof messages);
   return (
     <ul style={{ backgroundColor: "lightblue" }}>
       {messages.map(({ id, content, senderId }) => (

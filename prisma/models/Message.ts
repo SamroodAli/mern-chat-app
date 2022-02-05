@@ -8,29 +8,9 @@ class Messages {
       orderBy: {
         createdAt: "asc",
       },
-
-      select: {
-        id: true,
-        content: true,
-        createdAt: false,
-        updatedAt: false,
-        senderId: true,
-        sender: {
-          select: {
-            id: true,
-            username: true,
-            updatedAt: false,
-            createdAt: false,
-          },
-        },
-        reciever: {
-          select: {
-            id: true,
-            username: true,
-            updatedAt: false,
-            createdAt: false,
-          },
-        },
+      include: {
+        sender: true,
+        reciever: true,
       },
       where: {
         OR: [
