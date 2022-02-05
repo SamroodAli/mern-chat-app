@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useSelector, useActions } from "../redux/store";
 import { useRouter } from "next/router";
 
-const Layout: React.FunctionComponent<{ user?: User }> = ({
+const Layout: React.FC<{ user?: User }> = ({
   user,
   children,
 }) => {

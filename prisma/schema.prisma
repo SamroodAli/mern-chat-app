@@ -9,15 +9,14 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  username  String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  email     String   @unique
-  password  String
-
+  id               String    @id @default(cuid())
+  username         String    @unique
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  email            String    @unique
+  password         String
   messagesSent     Message[] @relation("Sender")
-  messagesRecieved Message[] @relation("Recipient")
+  messagesRecieved Message[] @relation("Reciever")
 }
 
 model Message {
@@ -25,7 +24,7 @@ model Message {
   content    String
   sender     User     @relation("Sender", fields: [senderId], references: [id])
   senderId   String
-  reciever   User     @relation("Recipient", fields: [recieverId], references: [id])
+  reciever   User     @relation("Reciever", fields: [recieverId], references: [id])
   recieverId String
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt

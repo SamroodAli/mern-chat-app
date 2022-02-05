@@ -1,10 +1,11 @@
-import prisma from "../../lib/prisma";
+import { UserModel, prisma } from "../../prisma";
 import { Message, User } from "@prisma/client";
 import { GetServerSideProps, NextPage } from "next";
 import { getUser, redirect } from "../../lib/auth";
 import * as React from "react";
 import io, { Socket } from "socket.io-client";
 import { useSelector } from "../../redux/store";
+import MessageList from "../../components/MessageList";
 
 const ENDPOINT = `http://192.168.100.175:3000`;
 
@@ -47,21 +48,7 @@ const Users: NextPage<{ reciever: User; pastMessages: Message[] }> = ({
   return (
     <div>
       <h1>Chat with {reciever.username}</h1>
-      <ul style={{ backgroundColor: "lightblue" }}>
-        {messages.map(({ id, content, senderId }) => (
-          <li
-            key={id}
-            style={{
-              color: senderId === sender?.id ? "green" : "red",
-              padding: "0.2rem",
-              margin: "0.2rem",
-              textAlign: senderId === sender?.id ? "right" : "left",
-            }}
-          >
-            {content}
-          </li>
-        ))}
-      </ul>
+      <MessageList messages={messages} sender={sender!} />
       <form onSubmit={onSubmit}>
         <input
           type="text"
@@ -80,16 +67,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if (!currentUser) {
     return redirect;
   }
-
-  const user = await prisma.user.findUnique({
-    where: {
-      username: context.query.username as string,
-    },
-    select: {
-      id: true,
-      username: true,
-    },
-  });
+  const user = await UserModel.getCurrentUser(context.query.username as string);
 
   if (!user) {
     return redirect;

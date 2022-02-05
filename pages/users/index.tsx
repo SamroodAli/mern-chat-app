@@ -1,10 +1,13 @@
-import prisma from "../../lib/prisma";
-import { User } from "@prisma/client";
+import { UserModel, UserWithLastMessage } from "../../prisma";
 import { GetServerSideProps, NextPage } from "next";
 import { getUser, redirect } from "../../lib/auth";
 import Link from "next/link";
+import { ChatItem } from "react-chat-elements";
+import { useRouter } from "next/router";
 
-const Users: NextPage<{ users: User[] }> = ({ users }) => {
+const Users: NextPage<{ users: UserWithLastMessage[] }> = ({ users }) => {
+  const router = useRouter();
+
   return (
     <div>
       <h1>Users</h1>
@@ -12,12 +15,23 @@ const Users: NextPage<{ users: User[] }> = ({ users }) => {
         {users.map((user) => (
           <li key={user.id}>
             <Link
-              href={{
-                pathname: "/users/[username]",
-                query: { username: user.username },
-              }}
+              href="/users/[username]"
+              as={`/users/${user.username}`}
+              passHref
             >
-              {user.username}
+              <div>
+                <ChatItem
+                  onClick={() => {
+                    router.push(`/users/${user.username}`);
+                  }}
+                  avatar={"https://via.placeholder.com/150"}
+                  alt={"Reactjs"}
+                  title={user.username}
+                  subtitle={user.lastMessage?.content}
+                  date={new Date()}
+                  unread={0}
+                />
+              </div>
             </Link>
           </li>
         ))}
@@ -32,22 +46,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if (!user) {
     return redirect;
   }
-
-  const users = await prisma.user.findMany({
-    where: {
-      NOT: {
-        id: user.id,
-      },
-    },
-    select: {
-      id: true,
-      username: true,
-    },
-  });
-
+  const usersWithLastMessage = await UserModel.getUsersWithLastMessage(user);
   return {
     props: {
-      users,
+      users: usersWithLastMessage,
       user,
     },
   };
