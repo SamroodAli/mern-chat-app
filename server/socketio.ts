@@ -19,7 +19,6 @@ const createServer = (expressApp: http.RequestListener) => {
 
       socket.on("message", async (data: { message: string }) => {
         // let message;
-
         const message = await prisma.message.create({
           data: {
             senderId: sender.id,
@@ -28,13 +27,9 @@ const createServer = (expressApp: http.RequestListener) => {
           },
         });
 
-        //@ts-ignore
-        if (io.sockets.adapter.rooms.get(senderRoom).size === 1) {
-          console.log("Alone");
-        }
-
         io.to(senderRoom).to(recieverRoom).emit("message", message);
       });
+
       socket.on("disconnect", () => {
         socket.leave(senderRoom);
         socket.leave(recieverRoom);

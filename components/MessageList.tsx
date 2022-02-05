@@ -24,4 +24,4 @@ const MessageList: React.FC<{ messages: Message[]; sender: User }> = ({
   );
 };
 
-export default MessageList;
+export default React.memo(MessageList);
