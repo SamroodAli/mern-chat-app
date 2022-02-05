@@ -1,17 +1,19 @@
 import { createStore, action, Action, createTypedHooks } from "easy-peasy";
 import { User } from "@prisma/client";
 
-interface StoreModel {
+interface State {
   currentUser?: User;
-  login: Action<StoreModel, User>;
+  login: Action<State, User>;
 }
 
-export const store = createStore<StoreModel>({
+// initial state and available actions
+export const store = createStore<State>({
+  currentUser: undefined,
   login: action((state, payload) => {
     state.currentUser = payload;
   }),
 });
 
-const typedHooks = createTypedHooks<StoreModel>();
+const typedHooks = createTypedHooks<State>();
 export const { useStoreActions: useActions } = typedHooks;
 export const { useStoreState: useSelector } = typedHooks;
