@@ -47,9 +47,19 @@ const Users: NextPage<{ reciever: User; pastMessages: Message[] }> = ({
   return (
     <div>
       <h1>Chat with {reciever.username}</h1>
-      <ul>
-        {messages.map(({ id, content }) => (
-          <li key={id}>{content}</li>
+      <ul style={{ backgroundColor: "lightblue" }}>
+        {messages.map(({ id, content, senderId }) => (
+          <li
+            key={id}
+            style={{
+              color: senderId === sender?.id ? "green" : "red",
+              padding: "0.2rem",
+              margin: "0.2rem",
+              textAlign: senderId === sender?.id ? "right" : "left",
+            }}
+          >
+            {content}
+          </li>
         ))}
       </ul>
       <form onSubmit={onSubmit}>
@@ -86,6 +96,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   const messages = await prisma.message.findMany({
+    orderBy: {
+      createdAt: "asc",
+    },
     where: {
       OR: [
         {
@@ -110,6 +123,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     select: {
       id: true,
       content: true,
+      senderId: true,
     },
   });
 
