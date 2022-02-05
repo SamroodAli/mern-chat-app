@@ -17,7 +17,10 @@ const MessageList: React.FC<{ messages: Message[]; sender: User }> = ({
             textAlign: senderId === sender?.id ? "right" : "left",
           }}
         >
-          {content}
+          <label htmlFor={id}>
+            {content}
+            <input type="checkbox" id={id} name="vehicle1" value={content} />
+          </label>
         </li>
       ))}
     </ul>
