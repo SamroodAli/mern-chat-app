@@ -27,7 +27,7 @@ const createServer = (expressApp: http.RequestListener) => {
 
         io.to(`${sender.id}-${reciever.id}`)
           .to(`${reciever.id}-${sender.id}`)
-          .emit("message", { message });
+          .emit("message", message);
       });
 
       socket.on("disconnect", () => {

@@ -79,6 +79,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     },
 
     select: {
+      id: true,
+      content: true,
+      createdAt: false,
+      updatedAt: false,
       sender: {
         select: {
           id: true,
@@ -118,7 +122,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     },
   });
 
-  console.log(messages);
   return {
     props: {
       reciever: user,
