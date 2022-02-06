@@ -8,7 +8,6 @@ import { errorHandler } from "./middlewares/error-handler";
 import { NotFoundError } from "./errors/not-found";
 import { currentUser } from "./middlewares/current-user";
 import { logoutRouter } from "./routes/logout";
-import { forwardRouter } from "./routes/forward";
 
 const app: Express = express();
 // app.use(morgan("dev"));
@@ -19,7 +18,6 @@ app.use(currentUser);
 app.use(signupRouter);
 app.use(loginRouter);
 app.use(logoutRouter);
-app.use(forwardRouter);
 
 app.all("/api/*", async () => {
   throw new NotFoundError();
