@@ -1,10 +1,10 @@
 import { Request, Response, Router } from "express";
-import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { body } from "express-validator";
 import { validateRequest } from "../../middlewares/validate-request";
 import Cookies from "cookies";
 import { UserModel } from "../../../models";
+import { PasswordManager } from "server/services/passwordManager";
 
 const router = Router();
 router.post(
@@ -22,7 +22,7 @@ router.post(
 
     const user = await UserModel.findUser(email);
 
-    if (user && bcrypt.compareSync(password, user.password)) {
+    if (user && PasswordManager.comparePassword(password, user.password)) {
       const token = jwt.sign(
         {
           username: user.username,

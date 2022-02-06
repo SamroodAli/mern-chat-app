@@ -1,10 +1,10 @@
-import bcyrpt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { User } from "@prisma/client";
 import { body } from "express-validator";
 import { Request, Response, Router } from "express";
 import { validateRequest } from "../../middlewares/validate-request";
 import Cookies from "cookies";
+import { PasswordManager } from "../../services/passwordManager";
 
 const router = Router();
 
@@ -20,8 +20,8 @@ router.post(
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    const salt = bcyrpt.genSaltSync();
     const { username, email, password } = req.body;
+    const hashedPassword = PasswordManager.hashPassword(password);
 
     let user: User;
     try {
@@ -29,7 +29,7 @@ router.post(
         data: {
           username,
           email,
-          password: bcyrpt.hashSync(password, salt),
+          password: hashedPassword,
         },
       });
     } catch (err) {
