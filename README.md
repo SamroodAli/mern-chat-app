@@ -30,4 +30,5 @@ Backend server code including middlewares,controllers and services.
 
 ##### Controllers
 
-- http controllers : Login, Signup
+- http controllers : Login, Signup and Logout
+- Web socket controllers: Chat and message Forwarding
