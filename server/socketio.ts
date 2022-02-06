@@ -57,8 +57,6 @@ const createServer = (expressApp: http.RequestListener) => {
             },
           });
 
-          console.log(forwardMessages);
-
           const promises = usersToForward.map((user) => {
             return prisma.message.createMany({
               data: messages.map((message) => ({

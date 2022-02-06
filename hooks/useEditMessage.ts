@@ -1,9 +1,12 @@
 import * as React from "react";
+import { useList } from "./useList";
 
 export const useEditMessages = () => {
-  const [forwardMessages, setForwardMessages] = React.useState<number[]>([]);
+  const [forwardMessages, addMessage, removeMessage, clearMessages] =
+    useList<number>();
+  const [forwardUsers, addUser, removeUser, clearUsers] = useList<number>();
+
   const [forward, setForward] = React.useState(false);
-  const [forwardUsers, setForwardUsers] = React.useState<String[]>([]);
   const [showUsers, setShowUsers] = React.useState(false);
 
   React.useEffect(() => {
@@ -14,25 +17,11 @@ export const useEditMessages = () => {
     }
   }, [forwardMessages.length]);
 
-  const addMessage = (id: number) => {
-    setForwardMessages((prev) => [...prev, id]);
-  };
-  const removeMessage = (id: number) => {
-    setForwardMessages((prev) => prev.filter((message) => message !== id));
-  };
-
-  const addUser = (id: string) => {
-    setForwardUsers((prev) => [...prev, id]);
-  };
-  const removeUser = (id: string) => {
-    setForwardUsers((prev) => prev.filter((message) => message !== id));
-  };
-
   const selectUsers = () => setShowUsers(true);
 
   const completeEdit = () => {
-    setForwardMessages([]);
-    setForwardUsers([]);
+    clearMessages();
+    clearUsers();
     setShowUsers(false);
     setForward(false);
   };
