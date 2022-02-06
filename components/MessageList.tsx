@@ -51,23 +51,47 @@ const ChatList: React.FC<{
     completeEdit();
   };
 
+  const cancelForward = () => {
+    completeEdit();
+  };
+
   return (
     <div>
       {forward && (
-        <button type="button" onClick={selectUsers}>
+        <button
+          type="button"
+          onClick={selectUsers}
+          className="bg-green-300 p-3 rounded-lg hover:p-4"
+        >
           forward
         </button>
       )}
       {showUsers && (
         <div>
-          <button type="button" onClick={submitForward}>
+          <button
+            type="button"
+            onClick={submitForward}
+            className="bg-green-300 p-3 rounded-lg hover:p-4"
+          >
             Submit
           </button>
-          <div>
+          <button
+            type="button"
+            onClick={cancelForward}
+            className="bg-red-300 p-3 rounded-lg hover:p-4"
+          >
+            Cancel
+          </button>
+          <div className="grid">
             {users.map(({ id, username }) => (
-              <label key={id}>
+              <label key={id} className="m-3 p-3 bg-gray-300">
                 {username}
-                <input type="checkbox" value={id} onChange={handleUsersCheck} />
+                <input
+                  type="checkbox"
+                  value={id}
+                  onChange={handleUsersCheck}
+                  className="mx-2"
+                />
               </label>
             ))}
           </div>
@@ -92,6 +116,7 @@ const ChatList: React.FC<{
                   type="checkbox"
                   name="vehicle1"
                   value={id}
+                  checked={forwardMessages.includes(id)}
                   onChange={handleCheck}
                 />
                 {!right && (

@@ -17,9 +17,13 @@ export const useEditMessages = () => {
     }
   }, [forwardMessages.length]);
 
-  const selectUsers = () => setShowUsers(true);
+  const selectUsers = () => {
+    setShowUsers(true);
+    setForward(false);
+  };
 
   const completeEdit = () => {
+    clearMessages();
     clearMessages();
     clearUsers();
     setShowUsers(false);
