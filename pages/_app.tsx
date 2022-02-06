@@ -1,6 +1,6 @@
 import { getUser } from "../lib/auth";
 import type { AppContext, AppProps } from "next/app";
-import Layout from "../components/layout";
+import Layout from "../components/Layout";
 import { StoreProvider } from "easy-peasy";
 import { store } from "../redux";
 import * as React from "react";

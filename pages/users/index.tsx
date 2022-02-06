@@ -13,17 +13,14 @@ const Users: NextPage<{ users: (User & { lastMessage?: Message })[] }> = ({
     <div>
       <h1>Users</h1>
       {users.map(({ id, username, lastMessage }) => (
-        <Link
-          key={id}
-          href="/users/[username]"
-          as={`/users/${username}`}
-          passHref
-        >
-          <UserCard
-            username={username}
-            message={lastMessage?.content || ""}
-            time={lastMessage ? timeago.format(lastMessage.createdAt) : ""}
-          />
+        <Link key={id} href="/users/[username]" as={`/users/${username}`}>
+          <a>
+            <UserCard
+              username={username}
+              message={lastMessage?.content || ""}
+              time={lastMessage ? timeago.format(lastMessage.createdAt) : ""}
+            />
+          </a>
         </Link>
       ))}
     </div>

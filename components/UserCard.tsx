@@ -18,7 +18,7 @@ const UserCard: React.FC<{
         />
         <div className="flex flex-col ml-2">
           <span className="font-medium text-black">{username}</span>
-          <span className="text-sm text-gray-700 truncate w-32">{message}</span>
+          <span className="text-sm text-gray-700 truncate ">{message}</span>
         </div>
       </div>
       <div className="flex flex-col items-center">
