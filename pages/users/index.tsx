@@ -3,7 +3,6 @@ import { GetServerSideProps, NextPage } from "next";
 import { getUser, redirect } from "../../lib/auth";
 import Link from "next/link";
 import { Message, User } from "@prisma/client";
-import { ChatItem } from "react-chat-elements";
 
 const Users: NextPage<{ users: (User & { lastMessage?: Message })[] }> = ({
   users,
@@ -18,14 +17,7 @@ const Users: NextPage<{ users: (User & { lastMessage?: Message })[] }> = ({
           as={`/users/${user.username}`}
           passHref
         >
-          <ChatItem
-            avatar={"https://placekitten.com/150"}
-            alt={user.username}
-            title={user.username}
-            subtitle={user.lastMessage?.content}
-            date={new Date(user.lastMessage?.createdAt || "")}
-            // unread={0}
-          />
+          {user.username}
         </Link>
       ))}
     </div>
