@@ -5,14 +5,19 @@ import { MessageModel } from "./Message";
 class Users {
   constructor(private readonly prisma: PrismaClient["user"]) {}
 
-  createUser(username: string, email: string, password: string) {
-    return prisma.user.create({
-      data: {
-        username,
-        email,
-        password,
-      },
-    });
+  async createUser(username: string, email: string, password: string) {
+    try {
+      const user = await prisma.user.create({
+        data: {
+          username,
+          email,
+          password,
+        },
+      });
+      return user;
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   async getUsersOtherThan(user: User) {
@@ -39,12 +44,17 @@ class Users {
     );
   }
 
-  findUser(email: string) {
-    return prisma.user.findUnique({
-      where: {
-        email,
-      },
-    });
+  async findUser(email: string) {
+    try {
+      const user = prisma.user.findUnique({
+        where: {
+          email,
+        },
+      });
+      return user;
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   getAllUsers() {
