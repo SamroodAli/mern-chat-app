@@ -5,6 +5,16 @@ import { MessageModel } from "./Message";
 class Users {
   constructor(private readonly prisma: PrismaClient["user"]) {}
 
+  createUser(username: string, email: string, password: string) {
+    return prisma.user.create({
+      data: {
+        username,
+        email,
+        password,
+      },
+    });
+  }
+
   async getUsersOtherThan(user: User) {
     const users = await this.prisma.findMany({
       where: {
