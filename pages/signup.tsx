@@ -3,7 +3,7 @@ import { getUser } from "../lib/auth";
 import { GetServerSideProps } from "next";
 import Form from "../components/form";
 
-const Signup = () => <Form mode="login" />;
+const Signup = () => <Form mode="signup" />;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const currentUser = getUser(context);

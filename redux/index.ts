@@ -18,7 +18,10 @@ interface State {
   currentUser?: User;
   loggedIn: Computed<State, boolean>;
   setCurrentUser: Action<State, User | undefined>;
-  login: Thunk<State, { email: string; password: string; router: NextRouter }>;
+  authenticate: Thunk<
+    State,
+    { router: NextRouter; email: string; password: string; username?: string }
+  >;
   logout: Thunk<State>;
 }
 
@@ -36,19 +39,23 @@ export const store = createStore<State>({
       NotificationManager.success("Signed out successfully");
     }
   }),
-  login: thunk(async (actions, { email, password, router }) => {
-    const { data } = await axios.post("/api/users/login", {
-      email,
-      password,
-    });
-    if (data?.content) {
-      actions.setCurrentUser(data.content);
-      NotificationManager.success("Login successfull", "Welcome", 200);
-      router.push("/users");
-    } else {
-      NotificationManager.error("Invalid credentials", "login error!", 200);
+  authenticate: thunk(
+    async (actions, { router, email, password, username }) => {
+      const mode = username ? "signup" : "login";
+      const { data } = await axios.post(`/api/users/${mode}`, {
+        email,
+        password,
+        username,
+      });
+      if (data?.content) {
+        actions.setCurrentUser(data.content);
+        NotificationManager.success("Login successfull", "Welcome", 200);
+        router.push("/users");
+      } else {
+        NotificationManager.error("Invalid credentials", "login error!", 200);
+      }
     }
-  }),
+  ),
 });
 
 const typedHooks = createTypedHooks<State>();
