@@ -1,6 +1,7 @@
 import * as http from "http";
 import * as socketio from "socket.io";
-import { ChatController } from "./controllers/chat";
+import { ChatController } from "./controllers/sockets/chat";
+import { ForwardController } from "./controllers/sockets/forward";
 
 const createServer = (expressApp: http.RequestListener) => {
   const server: http.Server = http.createServer(expressApp);
@@ -8,7 +9,10 @@ const createServer = (expressApp: http.RequestListener) => {
   io.attach(server);
 
   io.on("connection", (socket: socketio.Socket) => {
-    new ChatController(socket, io);
+    socket.on("login", (sender, reciever) => {
+      new ChatController(socket, io, sender, reciever);
+      new ForwardController(socket, sender);
+    });
   });
 
   return server;

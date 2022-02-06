@@ -2,8 +2,8 @@ import { Request, Response, Router } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { body } from "express-validator";
-import { validateRequest } from "../middlewares/validate-request";
-import { prisma } from "../../prisma";
+import { validateRequest } from "../../middlewares/validate-request";
+import { prisma } from "../../../prisma";
 import Cookies from "cookies";
 
 const router = Router();

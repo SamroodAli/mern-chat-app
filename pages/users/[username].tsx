@@ -42,7 +42,7 @@ const Users: NextPage<{
     e.preventDefault();
     setMessage("");
     if (socket) {
-      socket.emit("message", { message });
+      socket.emit("message", message);
     }
   };
 
