@@ -2,8 +2,8 @@ import { body } from "express-validator";
 import { Request, Response, Router } from "express";
 import { validateRequest } from "../../middlewares/validate-request";
 import { PasswordManager } from "../../services/passwordManager";
-import { JWTManager } from "server/services/jwtManager";
-import { UserModel } from "models";
+import { JWTManager } from "../../services/jwtManager";
+import { UserModel } from "../../../models";
 
 const router = Router();
 
