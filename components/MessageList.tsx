@@ -3,7 +3,7 @@ import { Message, User } from "@prisma/client";
 import { Socket } from "socket.io-client";
 import { useRouter } from "next/router";
 import { useEditMessages } from "../hooks";
-import { MessageList } from "react-chat-elements";
+import { MessageList, MessageBox } from "react-chat-elements";
 
 const ChatList: React.FC<{
   messages: Message[];
@@ -98,27 +98,30 @@ const ChatList: React.FC<{
             date: new Date(createdAt),
           }))}
         />
-        {/* {messages.map(({ id, content, senderId }) => (
-          <li
-            key={id}
-            style={{
-              color: senderId === sender?.id ? "green" : "red",
-              padding: "0.2rem",
-              margin: "0.2rem",
-              textAlign: senderId === sender?.id ? "right" : "left",
-            }}
-          >
+
+        {messages.map(({ id, content, senderId }) => (
+          <li key={id}>
             <label>
-              {content}
               <input
+                placeholder="content"
                 type="checkbox"
                 name="vehicle1"
                 value={id}
                 onChange={handleCheck}
-              />
+              >
+                <MessageBox
+                  position={"left"}
+                  type={"text"}
+                  text={content}
+                  forwarded={true}
+                  replyButton={true}
+                  onClick={console.log}
+                  retracted={true}
+                />
+              </input>
             </label>
           </li>
-        ))} */}
+        ))}
       </ul>
     </div>
   );

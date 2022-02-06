@@ -4,7 +4,7 @@ import { useList } from "./useList";
 export const useEditMessages = () => {
   const [forwardMessages, addMessage, removeMessage, clearMessages] =
     useList<number>();
-  const [forwardUsers, addUser, removeUser, clearUsers] = useList<number>();
+  const [forwardUsers, addUser, removeUser, clearUsers] = useList<string>();
 
   const [forward, setForward] = React.useState(false);
   const [showUsers, setShowUsers] = React.useState(false);
