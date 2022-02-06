@@ -33,6 +33,16 @@ class Users {
     return this.prisma.findMany();
   }
 
+  getUsersWith(ids: string[]) {
+    return prisma.user.findMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+    });
+  }
+
   async getCurrentUser(username: string) {
     return await prisma.user.findUnique({
       where: {

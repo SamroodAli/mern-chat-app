@@ -1,5 +1,6 @@
 import { prisma } from "../prisma";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Message, User } from "@prisma/client";
+import { UserModel } from "./User";
 
 class Messages {
   constructor(private readonly prisma: PrismaClient["message"]) {}
@@ -39,6 +40,43 @@ class Messages {
         ],
       },
     });
+  }
+
+  getMessagesWith(ids: number[]) {
+    return prisma.message.findMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+    });
+  }
+
+  forwardMessages(sender: User, messages: Message[], users: User[]) {
+    const promises = users.map((user) => {
+      return prisma.message.createMany({
+        data: messages.map((message) => ({
+          content: message.content,
+          recieverId: user.id,
+          senderId: sender.id,
+        })),
+      });
+    });
+    return Promise.all(promises);
+  }
+
+  async forwardToUsers(
+    sender: User,
+    messageIds: Message["id"][],
+    userIds: User["id"][]
+  ) {
+    const usersPromise = UserModel.getUsersWith(userIds);
+    const messagesPromise = MessageModel.getMessagesWith(messageIds);
+    const [users, messages] = await Promise.all([
+      usersPromise,
+      messagesPromise,
+    ]);
+    return this.forwardMessages(sender, messages, users);
   }
 }
 

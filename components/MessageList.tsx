@@ -41,18 +41,11 @@ const ChatList: React.FC<{
 
   const submitForward = async () => {
     if (socket) {
-      socket.emit(
-        "forward",
-        {
-          forwardMessages,
-          forwardUsers,
-        },
-        (response: any) => {
-          if (response.status) {
-            router.push("/users");
-          }
+      socket.emit("forward", forwardMessages, forwardUsers, (response: any) => {
+        if (response.status) {
+          router.push("/users");
         }
-      );
+      });
     }
     completeEdit();
   };

@@ -3,6 +3,7 @@ import { User } from "@prisma/client";
 import * as http from "http";
 import * as socketio from "socket.io";
 import { prisma } from "../prisma";
+import { MessageModel } from "../models";
 // import { prisma } from "../prisma";
 
 const createServer = (expressApp: http.RequestListener) => {
@@ -33,40 +34,16 @@ const createServer = (expressApp: http.RequestListener) => {
       socket.on(
         "forward",
         async (
-          {
-            forwardMessages,
-            forwardUsers,
-          }: {
-            forwardMessages: number[];
-            forwardUsers: string[];
-          },
+          forwardMessages: number[],
+          forwardUsers: string[],
           cb: (data: { status: string }) => void
         ) => {
-          const usersToForward = await prisma.user.findMany({
-            where: {
-              id: {
-                in: forwardUsers,
-              },
-            },
-          });
-          const messages = await prisma.message.findMany({
-            where: {
-              id: {
-                in: forwardMessages,
-              },
-            },
-          });
+          await MessageModel.forwardToUsers(
+            sender,
+            forwardMessages,
+            forwardUsers
+          );
 
-          const promises = usersToForward.map((user) => {
-            return prisma.message.createMany({
-              data: messages.map((message) => ({
-                content: message.content,
-                recieverId: user.id,
-                senderId: sender.id,
-              })),
-            });
-          });
-          await Promise.all(promises);
           cb({ status: "success" });
         }
       );
