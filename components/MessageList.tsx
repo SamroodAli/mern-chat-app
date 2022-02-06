@@ -10,7 +10,7 @@ const MessageList: React.FC<{
   users: User[];
   socket: Socket;
 }> = ({ messages, sender, users, socket }) => {
-  const [forwardMessages, setForwardMessages] = React.useState<String[]>([]);
+  const [forwardMessages, setForwardMessages] = React.useState<number[]>([]);
   const [forwardUsers, setForwardUsers] = React.useState<String[]>([]);
   const [forward, setForward] = React.useState(false);
   const [showUsers, setShowUsers] = React.useState(false);
@@ -26,10 +26,10 @@ const MessageList: React.FC<{
 
   const handleCheck: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     if (event.target.checked) {
-      setForwardMessages((prev) => [...prev, event.target.value]);
+      setForwardMessages((prev) => [...prev, +event.target.value]);
     } else {
       setForwardMessages((prev) =>
-        prev.filter((message) => message !== event.target.value)
+        prev.filter((message) => message !== +event.target.value)
       );
     }
   };
@@ -54,10 +54,8 @@ const MessageList: React.FC<{
       socket.emit(
         "forward",
         {
-          messages: forwardMessages
-            .sort((a, b) => +a.split(",")[0] - +b.split(",")[0])
-            .map((a) => a.split(",")[1]),
-          users: forwardUsers,
+          forwardMessages,
+          forwardUsers,
         },
         (response: any) => {
           if (response.status) {
@@ -66,6 +64,9 @@ const MessageList: React.FC<{
         }
       );
     }
+    setForwardMessages([]);
+    setForwardUsers([]);
+    setShowUsers(false);
   };
 
   return (
@@ -102,13 +103,12 @@ const MessageList: React.FC<{
               textAlign: senderId === sender?.id ? "right" : "left",
             }}
           >
-            <label htmlFor={id}>
+            <label>
               {content}
               <input
                 type="checkbox"
-                id={id}
                 name="vehicle1"
-                value={[index.toString(), content]}
+                value={id}
                 onChange={handleCheck}
               />
             </label>

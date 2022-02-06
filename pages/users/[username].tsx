@@ -78,7 +78,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     context.query.username as string
   );
 
-  const users = await UserModel.getAllUsers();
+  const users = await UserModel.getUsersOtherThan(currentUser);
 
   if (!reciever) {
     return redirect;

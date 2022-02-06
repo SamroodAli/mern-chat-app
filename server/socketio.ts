@@ -32,26 +32,37 @@ const createServer = (expressApp: http.RequestListener) => {
 
       socket.on(
         "forward",
-        async ({
-          messages,
-          users,
-          cb,
-        }: {
-          messages: string[];
-          users: string[];
-          cb: (data: { status: string }) => void;
-        }) => {
+        async (
+          {
+            forwardMessages,
+            forwardUsers,
+          }: {
+            forwardMessages: number[];
+            forwardUsers: string[];
+          },
+          cb: (data: { status: string }) => void
+        ) => {
           const usersToForward = await prisma.user.findMany({
             where: {
               id: {
-                in: users,
+                in: forwardUsers,
               },
             },
           });
+          const messages = await prisma.message.findMany({
+            where: {
+              id: {
+                in: forwardMessages,
+              },
+            },
+          });
+
+          console.log(forwardMessages);
+
           const promises = usersToForward.map((user) => {
             return prisma.message.createMany({
               data: messages.map((message) => ({
-                content: message,
+                content: message.content,
                 recieverId: user.id,
                 senderId: sender.id,
               })),
