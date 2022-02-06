@@ -1,8 +1,8 @@
 import * as React from "react";
 import { Message, User } from "@prisma/client";
-import axios from "axios";
 import { Socket } from "socket.io-client";
 import { useRouter } from "next/router";
+import { useEditMessages } from "../hooks";
 
 const MessageList: React.FC<{
   messages: Message[];
@@ -10,43 +10,33 @@ const MessageList: React.FC<{
   users: User[];
   socket: Socket;
 }> = ({ messages, sender, users, socket }) => {
-  const [forwardMessages, setForwardMessages] = React.useState<number[]>([]);
-  const [forwardUsers, setForwardUsers] = React.useState<String[]>([]);
-  const [forward, setForward] = React.useState(false);
-  const [showUsers, setShowUsers] = React.useState(false);
+  const {
+    forwardMessages,
+    forward,
+    addMessage,
+    removeMessage,
+    showUsers,
+    forwardUsers,
+    completeEdit,
+    selectUsers,
+    addUser,
+    removeUser,
+  } = useEditMessages();
+
   const router = useRouter();
 
-  React.useEffect(() => {
-    if (forwardMessages.length) {
-      setForward(true);
-    } else {
-      setForward(false);
-    }
-  }, [forwardMessages.length]);
-
   const handleCheck: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-    if (event.target.checked) {
-      setForwardMessages((prev) => [...prev, +event.target.value]);
-    } else {
-      setForwardMessages((prev) =>
-        prev.filter((message) => message !== +event.target.value)
-      );
-    }
+    event.target.checked
+      ? addMessage(+event.target.value)
+      : removeMessage(+event.target.value);
   };
 
   const handleUsersCheck: React.ChangeEventHandler<HTMLInputElement> = (
     event
   ) => {
-    if (event.target.checked) {
-      setForwardUsers((prev) => [...prev, event.target.value]);
-    } else {
-      setForwardUsers((prev) => prev.filter((id) => id !== event.target.value));
-    }
-    console.log(forwardUsers);
-  };
-
-  const handleFoward = () => {
-    setShowUsers(true);
+    event.target.checked
+      ? addUser(event.target.value)
+      : removeUser(event.target.value);
   };
 
   const submitForward = async () => {
@@ -64,15 +54,13 @@ const MessageList: React.FC<{
         }
       );
     }
-    setForwardMessages([]);
-    setForwardUsers([]);
-    setShowUsers(false);
+    completeEdit();
   };
 
   return (
     <div>
       {forward && (
-        <button type="button" onClick={handleFoward}>
+        <button type="button" onClick={selectUsers}>
           forward
         </button>
       )}
@@ -93,7 +81,7 @@ const MessageList: React.FC<{
       )}
 
       <ul style={{ backgroundColor: "lightblue" }}>
-        {messages.map(({ id, content, senderId }, index) => (
+        {messages.map(({ id, content, senderId }) => (
           <li
             key={id}
             style={{
