@@ -29,6 +29,14 @@ class Users {
     );
   }
 
+  findUser(email: string) {
+    return prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+  }
+
   getAllUsers() {
     return this.prisma.findMany();
   }

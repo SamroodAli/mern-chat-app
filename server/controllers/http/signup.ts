@@ -2,7 +2,6 @@ import bcyrpt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { User } from "@prisma/client";
 import { body } from "express-validator";
-import { prisma } from "../../../prisma";
 import { Request, Response, Router } from "express";
 import { validateRequest } from "../../middlewares/validate-request";
 import Cookies from "cookies";

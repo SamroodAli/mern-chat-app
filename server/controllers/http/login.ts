@@ -3,8 +3,8 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { body } from "express-validator";
 import { validateRequest } from "../../middlewares/validate-request";
-import { prisma } from "../../../prisma";
 import Cookies from "cookies";
+import { UserModel } from "../../../models";
 
 const router = Router();
 router.post(
@@ -20,11 +20,7 @@ router.post(
   async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
-    const user = await prisma.user.findUnique({
-      where: {
-        email,
-      },
-    });
+    const user = await UserModel.findUser(email);
 
     if (user && bcrypt.compareSync(password, user.password)) {
       const token = jwt.sign(
