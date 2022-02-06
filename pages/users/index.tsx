@@ -23,7 +23,7 @@ const Users: NextPage<{ users: (User & { lastMessage?: Message })[] }> = ({
             alt={user.username}
             title={user.username}
             subtitle={user.lastMessage?.content}
-            date={user.lastMessage?.createdAt}
+            date={new Date(user.lastMessage?.createdAt || "")}
             // unread={0}
           />
         </Link>

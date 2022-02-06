@@ -3,8 +3,9 @@ import { Message, User } from "@prisma/client";
 import { Socket } from "socket.io-client";
 import { useRouter } from "next/router";
 import { useEditMessages } from "../hooks";
+import { MessageList } from "react-chat-elements";
 
-const MessageList: React.FC<{
+const ChatList: React.FC<{
   messages: Message[];
   sender: User;
   users: User[];
@@ -57,6 +58,10 @@ const MessageList: React.FC<{
     completeEdit();
   };
 
+  const handleForward = (event: any) => {
+    console.log(event);
+  };
+
   return (
     <div>
       {forward && (
@@ -81,7 +86,19 @@ const MessageList: React.FC<{
       )}
 
       <ul style={{ backgroundColor: "lightblue" }}>
-        {messages.map(({ id, content, senderId }) => (
+        <MessageList
+          className="message-list"
+          lockable={true}
+          toBottomHeight={"100%"}
+          onForwardClick={handleForward}
+          dataSource={messages.map(({ content, senderId, createdAt }) => ({
+            position: senderId === sender?.id ? "right" : "left",
+            text: content,
+            type: "text",
+            date: new Date(createdAt),
+          }))}
+        />
+        {/* {messages.map(({ id, content, senderId }) => (
           <li
             key={id}
             style={{
@@ -101,10 +118,10 @@ const MessageList: React.FC<{
               />
             </label>
           </li>
-        ))}
+        ))} */}
       </ul>
     </div>
   );
 };
 
-export default React.memo(MessageList);
+export default React.memo(ChatList);
