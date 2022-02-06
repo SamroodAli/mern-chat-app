@@ -11,6 +11,7 @@ import {
 import { User } from "@prisma/client";
 import axios from "axios";
 import { NextRouter } from "next/router";
+//@ts-ignore // react notifications module does not have type definitions
 import { NotificationManager } from "react-notifications";
 
 interface State {
