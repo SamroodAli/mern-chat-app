@@ -4,6 +4,7 @@ import Layout from "../components/layout";
 import { StoreProvider } from "easy-peasy";
 import { store } from "../redux/store";
 import * as React from "react";
+import "react-chat-elements/dist/main.css";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
