@@ -75,19 +75,26 @@ const ChatList: React.FC<{
         </div>
       )}
 
-      {messages.map(({ id, content, senderId }) => (
-        <div className="">
-          {senderId === sender?.id && <SenderMessage message={content} />}
-          <input
-            placeholder={content}
-            type="checkbox"
-            name="vehicle1"
-            value={id}
-            onChange={handleCheck}
-          />
-          {senderId !== sender?.id && <RecieverMessage message={content} />}
-        </div>
-      ))}
+      <div className="flex flex-col h-chat_mb xs:h-chat_xs sm:h-chat_sm md:h-chat_md lg:h-chat_lg overflow-auto">
+        {messages.map(({ id, content, senderId }) => {
+          const right = senderId === sender?.id;
+          return (
+            <div className={right ? "self-end" : "self-start"} key={id}>
+              <div className="flex">
+                {right && <SenderMessage message={content} />}
+                <input
+                  placeholder={content}
+                  type="checkbox"
+                  name="vehicle1"
+                  value={id}
+                  onChange={handleCheck}
+                />
+                {!right && <RecieverMessage message={content} />}
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };

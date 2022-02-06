@@ -32,6 +32,7 @@ const Layout: React.FC<{ user?: User }> = ({ user, children }) => {
         links={links}
         lastButtonOnClick={currentUser ? signOut : () => router.push("/login")}
         lastButtonText={currentUser ? "Signout" : "Login"}
+        username={currentUser?.username || ""}
       />
       {children}
     </div>

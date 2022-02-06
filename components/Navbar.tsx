@@ -6,9 +6,10 @@ const NavBar: React.FC<{
   links: { href: string; text: string }[];
   lastButtonOnClick: React.MouseEventHandler<HTMLButtonElement>;
   lastButtonText: string;
-}> = ({ links, lastButtonOnClick, lastButtonText }) => {
+  username: string;
+}> = ({ links, lastButtonOnClick, lastButtonText, username }) => {
   return (
-    <nav className="flex items-center justify-between flex-wrap bg-teal-500 p-6">
+    <nav className="flex items-center justify-between flex-wrap bg-teal-500 p-1 lg:p-6">
       <div className="flex items-center flex-shrink-0 text-white mr-6">
         <svg
           className="fill-current h-8 w-8 mr-2"
@@ -34,6 +35,9 @@ const NavBar: React.FC<{
             </Link>
           ))}
         </div>
+        <p className="block mt-4 md:text-xl lg:inline-block lg:mt-0 text-teal-900 hover:text-white mr-10">
+          {username}
+        </p>
         <NavbarButton onClick={lastButtonOnClick} text={lastButtonText} />
       </div>
     </nav>
