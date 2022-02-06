@@ -48,7 +48,14 @@ const Users: NextPage<{
   return (
     <div>
       <h1>Chat with {reciever.username}</h1>
-      <MessageList messages={messages} sender={sender!} users={users} />
+      {socket && (
+        <MessageList
+          messages={messages}
+          sender={sender!}
+          users={users}
+          socket={socket}
+        />
+      )}
       <form onSubmit={onSubmit}>
         <input
           type="text"

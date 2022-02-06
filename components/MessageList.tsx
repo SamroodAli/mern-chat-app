@@ -1,17 +1,20 @@
 import * as React from "react";
 import { Message, User } from "@prisma/client";
 import axios from "axios";
-import { randomUUID } from "crypto";
+import { Socket } from "socket.io-client";
+import { useRouter } from "next/router";
 
 const MessageList: React.FC<{
   messages: Message[];
   sender: User;
   users: User[];
-}> = ({ messages, sender, users }) => {
+  socket: Socket;
+}> = ({ messages, sender, users, socket }) => {
   const [forwardMessages, setForwardMessages] = React.useState<String[]>([]);
   const [forwardUsers, setForwardUsers] = React.useState<String[]>([]);
   const [forward, setForward] = React.useState(false);
   const [showUsers, setShowUsers] = React.useState(false);
+  const router = useRouter();
 
   React.useEffect(() => {
     if (forwardMessages.length) {
@@ -47,17 +50,22 @@ const MessageList: React.FC<{
   };
 
   const submitForward = async () => {
-    const { data } = await axios.post(
-      "http://192.168.100.175:3000/api/messages/forward",
-      {
-        messages: forwardMessages
-          .sort((a, b) => +a.split(",")[0] - +b.split(",")[0])
-          .map((a) => a.split(",")[1]),
-        sender: sender.id,
-        users: forwardUsers,
-      }
-    );
-    console.log(data);
+    if (socket) {
+      socket.emit(
+        "forward",
+        {
+          messages: forwardMessages
+            .sort((a, b) => +a.split(",")[0] - +b.split(",")[0])
+            .map((a) => a.split(",")[1]),
+          users: forwardUsers,
+        },
+        (response: any) => {
+          if (response.status) {
+            router.push("/users");
+          }
+        }
+      );
+    }
   };
 
   return (
