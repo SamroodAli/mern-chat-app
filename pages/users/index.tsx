@@ -1,4 +1,4 @@
-import { UserModel } from "../../prisma";
+import { UserModel } from "../../models";
 import { GetServerSideProps, NextPage } from "next";
 import { getUser, redirect } from "../../lib/auth";
 import Link from "next/link";

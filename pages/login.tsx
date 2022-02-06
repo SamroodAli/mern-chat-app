@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useActions, useSelector } from "../redux/store";
+import { useActions } from "../redux";
 import { useRouter } from "next/router";
 import { getUser } from "../lib/auth";
 import { GetServerSideProps } from "next";

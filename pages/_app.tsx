@@ -2,7 +2,7 @@ import { getUser } from "../lib/auth";
 import type { AppContext, AppProps } from "next/app";
 import Layout from "../components/layout";
 import { StoreProvider } from "easy-peasy";
-import { store } from "../redux/store";
+import { store } from "../redux";
 import * as React from "react";
 import "./tailwind.css";
 

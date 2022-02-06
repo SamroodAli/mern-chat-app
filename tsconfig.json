@@ -3,6 +3,7 @@
     "target": "esnext",
     "module": "esnext",
     "jsx": "preserve",
+    "importHelpers": true,
     "lib": ["dom", "es2017"],
     "baseUrl": ".",
     "moduleResolution": "node",

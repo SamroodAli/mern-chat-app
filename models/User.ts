@@ -1,4 +1,4 @@
-import { prisma } from "../client";
+import { prisma } from "../prisma";
 import { PrismaClient, User } from "@prisma/client";
 import { MessageModel } from "./Message";
 

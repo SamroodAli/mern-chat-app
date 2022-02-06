@@ -80,7 +80,7 @@ const ChatList: React.FC<{
         </div>
       )}
 
-      <ul style={{ backgroundColor: "lightblue" }}>
+      <ul>
         {messages.map(({ id, content, senderId }) => (
           <li
             key={id}
@@ -92,13 +92,14 @@ const ChatList: React.FC<{
             }}
           >
             <label>
-              {content}
+              {senderId === sender?.id && content}
               <input
                 type="checkbox"
                 name="vehicle1"
                 value={id}
                 onChange={handleCheck}
               />
+              {senderId !== sender?.id && content}
             </label>
           </li>
         ))}

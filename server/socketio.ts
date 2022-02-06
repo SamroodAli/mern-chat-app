@@ -2,7 +2,7 @@
 import { User } from "@prisma/client";
 import * as http from "http";
 import * as socketio from "socket.io";
-import { prisma } from "../prisma/client";
+import { prisma } from "../prisma";
 // import { prisma } from "../prisma";
 
 const createServer = (expressApp: http.RequestListener) => {

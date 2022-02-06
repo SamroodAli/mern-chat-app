@@ -1,13 +1,10 @@
 import { User } from "@prisma/client";
 import * as React from "react";
 import Link from "next/link";
-import { useSelector, useActions } from "../redux/store";
+import { useSelector, useActions } from "../redux";
 import { useRouter } from "next/router";
 
-const Layout: React.FC<{ user?: User }> = ({
-  user,
-  children,
-}) => {
+const Layout: React.FC<{ user?: User }> = ({ user, children }) => {
   const { loggedIn, currentUser } = useSelector((state) => state);
   const { setCurrentUser, logout } = useActions((actions) => actions);
   const router = useRouter();

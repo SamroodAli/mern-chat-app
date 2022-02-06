@@ -1,10 +1,10 @@
-import { UserModel, MessageModel } from "../../prisma";
+import { UserModel, MessageModel } from "../../models";
 import { Message, User } from "@prisma/client";
 import { GetServerSideProps, NextPage } from "next";
 import { getUser, redirect } from "../../lib/auth";
 import * as React from "react";
 import io, { Socket } from "socket.io-client";
-import { useSelector } from "../../redux/store";
+import { useSelector } from "../../redux";
 import MessageList from "../../components/MessageList";
 const ENDPOINT = `http://192.168.100.175:3000`;
 
