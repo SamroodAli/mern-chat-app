@@ -3,6 +3,8 @@ import { GetServerSideProps, NextPage } from "next";
 import { getUser, redirect } from "../../lib/auth";
 import Link from "next/link";
 import { Message, User } from "@prisma/client";
+import UserCard from "../../components/UserCard";
+import * as timeago from "timeago.js";
 
 const Users: NextPage<{ users: (User & { lastMessage?: Message })[] }> = ({
   users,
@@ -10,14 +12,18 @@ const Users: NextPage<{ users: (User & { lastMessage?: Message })[] }> = ({
   return (
     <div>
       <h1>Users</h1>
-      {users.map((user) => (
+      {users.map(({ id, username, lastMessage }) => (
         <Link
-          key={user.id}
+          key={id}
           href="/users/[username]"
-          as={`/users/${user.username}`}
+          as={`/users/${username}`}
           passHref
         >
-          {user.username}
+          <UserCard
+            username={username}
+            message={lastMessage?.content || ""}
+            time={lastMessage ? timeago.format(lastMessage.createdAt) : ""}
+          />
         </Link>
       ))}
     </div>
