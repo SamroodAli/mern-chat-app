@@ -11,6 +11,7 @@ import {
 import { User } from "@prisma/client";
 import axios from "axios";
 import { NextRouter } from "next/router";
+import { NotificationManager } from "react-notifications";
 
 interface State {
   currentUser?: User;
@@ -31,6 +32,7 @@ export const store = createStore<State>({
     const { data } = await axios.post("/api/users/logout");
     if (data) {
       actions.setCurrentUser(undefined);
+      NotificationManager.success("Signed out successfully");
     }
   }),
   login: thunk(async (actions, { email, password, router }) => {
@@ -40,7 +42,10 @@ export const store = createStore<State>({
     });
     if (data?.content) {
       actions.setCurrentUser(data.content);
+      NotificationManager.success("Login successfull", "Welcome");
       router.push("/users");
+    } else {
+      NotificationManager.error("Invalid credentials", "login error!", 5000);
     }
   }),
 });

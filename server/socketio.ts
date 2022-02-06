@@ -4,7 +4,6 @@ import * as http from "http";
 import * as socketio from "socket.io";
 import { prisma } from "../prisma";
 import { MessageModel } from "../models";
-// import { prisma } from "../prisma";
 
 const createServer = (expressApp: http.RequestListener) => {
   const server: http.Server = http.createServer(expressApp);
