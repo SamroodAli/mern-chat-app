@@ -3,6 +3,7 @@ import * as React from "react";
 import Link from "next/link";
 import { useSelector, useActions } from "../redux";
 import { useRouter } from "next/router";
+import Navbar from "./Navbar";
 
 const Layout: React.FC<{ user?: User }> = ({ user, children }) => {
   const { loggedIn, currentUser } = useSelector((state) => state);
@@ -20,29 +21,18 @@ const Layout: React.FC<{ user?: User }> = ({ user, children }) => {
     logout();
   };
 
+  const links: { href: string; text: string }[] = [
+    { href: "/", text: "Home" },
+    { href: "/users", text: "Users" },
+  ];
+
   return (
     <div>
-      <div>
-        Navbar {currentUser ? `${currentUser?.username}` : "Signed out"}
-      </div>
-      <div>
-        <Link href="/">
-          <a>Home</a>
-        </Link>{" "}
-        {!currentUser && (
-          <Link href="/login">
-            <a>Login</a>
-          </Link>
-        )}
-        <Link href="/users">
-          <a>Users</a>
-        </Link>
-        {currentUser && (
-          <button type="button" onClick={signOut}>
-            Signout
-          </button>
-        )}
-      </div>
+      <Navbar
+        links={links}
+        lastButtonOnClick={currentUser ? signOut : () => router.push("/login")}
+        lastButtonText={currentUser ? "Signout" : "Login"}
+      />
       {children}
     </div>
   );

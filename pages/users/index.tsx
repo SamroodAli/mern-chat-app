@@ -11,7 +11,6 @@ const Users: NextPage<{ users: (User & { lastMessage?: Message })[] }> = ({
 }) => {
   return (
     <div>
-      <h1>Users</h1>
       {users.map(({ id, username, lastMessage }) => (
         <Link key={id} href="/users/[username]" as={`/users/${username}`}>
           <a>

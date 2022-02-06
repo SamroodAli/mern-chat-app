@@ -42,10 +42,10 @@ export const store = createStore<State>({
     });
     if (data?.content) {
       actions.setCurrentUser(data.content);
-      NotificationManager.success("Login successfull", "Welcome");
+      NotificationManager.success("Login successfull", "Welcome", 200);
       router.push("/users");
     } else {
-      NotificationManager.error("Invalid credentials", "login error!", 5000);
+      NotificationManager.error("Invalid credentials", "login error!", 200);
     }
   }),
 });
