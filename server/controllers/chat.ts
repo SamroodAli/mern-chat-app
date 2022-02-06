@@ -1,10 +1,9 @@
 import * as socketio from "socket.io";
 import { User } from "@prisma/client";
 import { MessageModel } from "../../models";
-import { prisma } from "../../prisma";
 
 export class ChatController {
-  constructor(socket: socketio.Socket) {
+  constructor(socket: socketio.Socket, io: socketio.Server) {
     socket.on("login", (sender: User, reciever: User) => {
       const senderRoom = `${sender.id}-${reciever.id}`;
       const recieverRoom = `${reciever.id}-${sender.id}`;
@@ -13,15 +12,13 @@ export class ChatController {
 
       socket.on("message", async (data: { message: string }) => {
         // let message;
-        const message = await prisma.message.create({
-          data: {
-            senderId: sender.id,
-            recieverId: reciever.id,
-            content: data.message,
-          },
-        });
+        const message = await MessageModel.sendMessage(
+          sender,
+          reciever,
+          data.message
+        );
 
-        socket.to(senderRoom).to(recieverRoom).emit("message", message);
+        io.to(senderRoom).to(recieverRoom).emit("message", message);
       });
 
       socket.on(

@@ -48,7 +48,9 @@ const Users: NextPage<{
 
   return (
     <div>
-      <h1>Chat with {reciever.username}</h1>
+      <h1 className="bg-teal-400 text-center text-lg text-green-900">
+        {reciever.username}
+      </h1>
       {socket && (
         <MessageList
           messages={messages}

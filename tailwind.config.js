@@ -4,9 +4,6 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    screens: {
-      xs: "320px",
-    },
     extend: {
       height: {
         chat_mb: "40vh",

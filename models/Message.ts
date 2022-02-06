@@ -42,6 +42,16 @@ class Messages {
     });
   }
 
+  sendMessage(sender: User, reciever: User, content: string) {
+    return prisma.message.create({
+      data: {
+        senderId: sender.id,
+        recieverId: reciever.id,
+        content: content,
+      },
+    });
+  }
+
   getMessagesWith(ids: number[]) {
     return prisma.message.findMany({
       where: {

@@ -8,7 +8,7 @@ const createServer = (expressApp: http.RequestListener) => {
   io.attach(server);
 
   io.on("connection", (socket: socketio.Socket) => {
-    new ChatController(socket);
+    new ChatController(socket, io);
   });
 
   return server;

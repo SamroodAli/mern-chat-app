@@ -22,7 +22,7 @@ const NavBar: React.FC<{
         </svg>
         <span className="font-semibold text-xl tracking-tight">MernChat</span>
       </div>
-      <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
+      <div className="w-full  flex-grow lg:flex lg:items-center lg:w-auto">
         <div className="text-sm lg:flex-grow">
           {links.map(({ href, text }) => (
             <Link key={text} href={href}>
