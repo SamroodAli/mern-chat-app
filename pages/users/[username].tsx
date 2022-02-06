@@ -5,6 +5,7 @@ import { getUser, redirect } from "../../lib/auth";
 import * as React from "react";
 import io, { Socket } from "socket.io-client";
 import { useSelector } from "../../redux";
+
 import MessageList from "../../components/MessageList";
 const ENDPOINT = `http://192.168.100.175:3000`;
 
@@ -56,15 +57,18 @@ const Users: NextPage<{
           socket={socket}
         />
       )}
-      <form onSubmit={onSubmit}>
-        <input
-          type="text"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          placeholder="Message"
-        />
-        <input type="submit" value="Send" />
-      </form>
+      <div className="flex justify-center">
+        <form onSubmit={onSubmit} className="w-11/12 my-3 absolute bottom-0">
+          <input
+            type="text"
+            value={message}
+            placeholder="Write Something"
+            onChange={(e) => setMessage(e.target.value)}
+            className="w-full p-3 pl-12 focus:outline-none focus:placeholder-gray-400 text-gray-600 placeholder-gray-600  bg-gray-200 rounded-full"
+          />
+          <input type="submit" value="Send" className="hidden" />
+        </form>
+      </div>
     </div>
   );
 };
