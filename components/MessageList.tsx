@@ -3,8 +3,7 @@ import { Message, User } from "@prisma/client";
 import { Socket } from "socket.io-client";
 import { useRouter } from "next/router";
 import { useEditMessages } from "../hooks";
-import SenderMessage from "./SenderMessage";
-import RecieverMessage from "./RecieverMessage";
+import MessageContent from "./Message";
 
 const ChatList: React.FC<{
   messages: Message[];
@@ -76,12 +75,18 @@ const ChatList: React.FC<{
       )}
 
       <div className="flex flex-col h-chat_mb xs:h-chat_xs sm:h-chat_sm md:h-chat_md lg:h-chat_lg overflow-auto">
-        {messages.map(({ id, content, senderId }) => {
+        {messages.map(({ id, content, senderId, createdAt }) => {
           const right = senderId === sender?.id;
           return (
             <div className={right ? "self-end" : "self-start"} key={id}>
-              <div className="flex">
-                {right && <SenderMessage message={content} />}
+              <div className="flex my-1">
+                {right && (
+                  <MessageContent
+                    message={content}
+                    time={createdAt}
+                    sender={true}
+                  />
+                )}
                 <input
                   placeholder={content}
                   type="checkbox"
@@ -89,7 +94,13 @@ const ChatList: React.FC<{
                   value={id}
                   onChange={handleCheck}
                 />
-                {!right && <RecieverMessage message={content} />}
+                {!right && (
+                  <MessageContent
+                    message={content}
+                    time={createdAt}
+                    sender={false}
+                  />
+                )}
               </div>
             </div>
           );
