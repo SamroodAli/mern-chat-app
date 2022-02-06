@@ -12,7 +12,7 @@ class Messages {
     return this.prisma.findMany({
       take,
       orderBy: {
-        createdAt: order,
+        id: order,
       },
       include: {
         sender: true,
