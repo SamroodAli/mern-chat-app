@@ -7,7 +7,7 @@ import io, { Socket } from "socket.io-client";
 import { useSelector } from "../../redux";
 
 import MessageList from "../../components/MessageList";
-const ENDPOINT = `http://192.168.100.175:3000`;
+const ENDPOINT = process.env.ENDPOINT!;
 
 const Users: NextPage<{
   reciever: User;
